@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "915835286798",
+    "firebase_url": "https://buddymusic-14682-default-rtdb.firebaseio.com",
+    "project_id": "buddymusic-14682",
+    "storage_bucket": "buddymusic-14682.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915835286798:android:33e6a50bf19aa1f906d35f",
+        "android_client_info": {
+          "package_name": "com.AI.BuddyMusic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTnEw2bGFc8IUWOfhlL6jVBbMHRv_jv0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuddyMusic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #1f1f1f;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 10px;
+        }
+        .card {
+            background: #333;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            transition: background-color 0.3s ease;
+        }
+        .card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .card p {
+            font-size: 1rem;
+            color: #888;
+            margin: 5px 0;
+        }
+        .card-actions {
+            margin-top: auto; /* Push buttons to the bottom */
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            margin-top: 15px;
+            background: #161616;
+            color: white;
+            border-radius: 100px;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            text-align: center;
+        }
+        .btn:hover {
+            background: #013200;
+        }
+        /* Music player styles */
+        .music-player {
+            display: none; /* Initially hidden */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #888;
+            padding: 10px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            border-top-right-radius: 30px;
+            border-top-left-radius: 30px;
+        }
+        
+        .music-player.visible {
+            display: block; /* Show when visible class is added */
+        }
+        
+        .song-info img {
+            width: 60px; /* Adjust size as needed */
+            height: 60px;
+            object-fit: cover;
+        }
+        
+        .song-info div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .material-symbols-outlined {
+            cursor: pointer;
+        }
+        
+        .music-player .controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .music-player img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .music-player .song-info {
+            display: flex;
+            align-items: center;
+        }
+        .music-player .song-info h4 {
+            margin: 0;
+            color: black;
+        }
+        .music-player .maximize-btn {
+            cursor: pointer;
+            text-align: right;
+            font-size: 35px;
+      
+        }
+        .maximize {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            cursor: pointer;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 50%;
+            padding: 8px;
+            display: none;
+            font-size: 30px;
+        }
+        
+        .tit{
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+          margin-top: 20px;
+          margin-bottom: 5px;
+        }
+        
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>BuddyMusic</h1>
+    </header>
+    <div class="container">
+        <div id="musicContainer"></div>
+    </div>
+
+    <div class="music-player" id="musicPlayer">
+        <div class="song-info">
+        <span class="material-symbols-outlined maximize-btn" id="minimizeBtn" style="color: black;">expand_more</span>
+
+            <img id="songImage" src="" alt="Song Art" />
+            <div class="player">
+                <h4 id="songTitle" style="color: black; margin-bottom:20px;" class="tit"> </h4>
+                <audio id="audioPlayer" controls>Your browser does not support the audio element.</audio>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Maximize button -->
+    <span class="material-symbols-outlined maximize" id="maximizeBtn" style="color: black;">expand_less</span>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "buddymusic-14682.firebaseapp.com",
+            databaseURL: "https://buddymusic-14682-default-rtdb.firebaseio.com",
+            projectId: "buddymusic-14682",
+            storageBucket: "buddymusic-14682.appspot.com",
+            messagingSenderId: "915835286798",
+            appId: "1:915835286798:android:33e6a50bf19aa1f906d35f"
+        };
+    
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    
+        // Fetch data from Firebase and listen for changes
+        function fetchMusicData() {
+            const musicRef = db.ref('music').limitToFirst(50); // Limit to the first 50 songs for better performance
+            musicRef.on('value', (snapshot) => {
+                const songs = snapshot.val();
+                const songList = Object.entries(songs);
+                shuffleArray(songList); // Shuffle songs for randomness
+                displayMusic(songList);
+            });
+        }
+    
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+    
+        function displayMusic(songList) {
+            const container = document.getElementById('musicContainer');
+            container.innerHTML = ''; // Clear previous content
+    
+            songList.forEach(([key, song]) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+    
+                const image = document.createElement('img');
+                image.src = song.imagePath;
+                image.alt = song.songName;
+                image.loading = "lazy"; // Lazy load images for better performance
+    
+                const cardContent = document.createElement('div');
+                cardContent.classList.add('card-content');
+    
+                const title = document.createElement('h3');
+                title.textContent = song.songName;
+    
+                const description = document.createElement('p');
+                description.textContent = song.writer;
+    
+                const cardActions = document.createElement('div');
+                cardActions.classList.add('card-actions');
+    
+                const playButton = document.createElement('a');
+                playButton.href = '#';
+                playButton.textContent = '▶';
+                playButton.classList.add('btn');
+                playButton.dataset.songId = key; // Store the song ID as a data attribute
+                playButton.addEventListener('click', (event) => playSong(event.currentTarget.dataset.songId, title.textContent));
+    
+                cardActions.appendChild(playButton);
+    
+                cardContent.appendChild(title);
+                cardContent.appendChild(description);
+                cardContent.appendChild(cardActions);
+    
+                card.appendChild(image);
+                card.appendChild(cardContent);
+                container.appendChild(card);
+            });
+    
+            gsap.from(".card", { 
+                opacity: 0, 
+                x: -50, 
+                duration: 1, 
+                stagger: 0.2,
+                ease: "power4.out" 
+            });
+        }
+    
+        // Play song by getting the song data from Firebase by ID
+        function playSong(songId, title) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const songTitle = document.getElementById('songTitle');
+            const songImage = document.getElementById('songImage');
+            const musicPlayer = document.getElementById('musicPlayer');
+            const maximizeBtn = document.getElementById('maximizeBtn');
+            
+            // Get the song data from Firebase based on the songId
+            const songRef = db.ref(`music/${songId}`);
+            songRef.once('value', (snapshot) => {
+                const songData = snapshot.val();
+                
+                // Check if songData and required fields are available
+                if (songData && songData.musicPath && songData.imagePath) {
+                    // Ensure the paths are correctly formatted
+                    let songUrl = songData.musicPath.replace(/\\/g, '/');
+                    let imageUrl = songData.imagePath.replace(/\\/g, '/');
+                    
+                    // If using a local path, ensure the path is correct
+                    // For example, if the path is relative to the root of your project
+                    songUrl = new URL(songUrl, window.location.origin).href;
+                    imageUrl = new URL(imageUrl, window.location.origin).href;
+                    
+                    // Set the song URL and image URL from Firebase
+                    audioPlayer.src = songUrl;
+                    songImage.src = imageUrl;
+                    songTitle.textContent = ` ${title}`;
+                    
+                    // Show the music player at the bottom
+                    musicPlayer.classList.add('visible');
+                    maximizeBtn.style.display = 'none'; // Hide the maximize button while music is playing
+                    
+                    // Play the audio
+                    audioPlayer.play();
+                } else {
+                    console.error("Song URL or Image URL not found or missing!");
+                }
+            }).catch((error) => {
+                console.error("Error fetching song data:", error);
+            });
+        }
+              // Minimize and maximize functionality
+              const minimizeBtn = document.getElementById('minimizeBtn');
+              const maximizeBtn = document.getElementById('maximizeBtn');
+              const musicPlayer = document.getElementById('musicPlayer');
+          
+              minimizeBtn.addEventListener('click', () => {
+                  musicPlayer.style.display = 'none';
+                  maximizeBtn.style.display = 'block';
+              });
+          
+              maximizeBtn.addEventListener('click', () => {
+                  musicPlayer.style.display = 'block';
+                  maximizeBtn.style.display = 'none';
+              });
+          
+        // Fetch music data on page load
+        window.onload = fetchMusicData;
+    </script>
+    
+</body>
+</html>

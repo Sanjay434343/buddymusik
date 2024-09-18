@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        body {
+            background: linear-gradient(to left, #b0d2ff 25%, #e1eeff 75%);
+            margin: 0;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e0e0e0;
+        }
+
+        .player-container {
+            background: rgba(255, 255, 255, 0.604);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 90%;
+            max-width: 500px; /* Adjusted max-width for better responsiveness */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden; /* Ensure content stays within the container */
+        }
+
+        .player-container img {
+            width: 100%;
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .player-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .player-container h1 {
+            margin: 15px 0;
+            font-size: 1.5rem; /* Responsive font size */
+            letter-spacing: 0.5px;
+            color: black;
+        }
+
+        .player-container audio {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: rgba(0, 142, 137, 0.8) !important;
+        }
+
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-volume-slider {
+            color: #fff !important;
+        }
+
+        @media (max-width: 768px) {
+            .player-container {
+                padding: 15px;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            }
+
+            .player-container h1 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .player-container {
+                padding: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+
+            .player-container h1 {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container" id="playerContainer">
+        <img id="songImage" src="" alt="Album Art">
+        <h1 id="songTitle">Song Title</h1>
+        <audio id="audioPlayer" controls>
+            <source src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "buddymusic-14682.firebaseapp.com",
+            databaseURL: "https://buddymusic-14682-default-rtdb.firebaseio.com",
+            projectId: "buddymusic-14682",
+            storageBucket: "buddymusic-14682.appspot.com",
+            messagingSenderId: "915835286798",
+            appId: "1:915835286798:android:33e6a50bf19aa1f906d35f"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        function getParameterByName(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        window.onload = function() {
+            const songId = getParameterByName('songId');
+            console.log('Song ID from URL:', songId); // Debugging log
+            
+            if (songId) {
+                const songRef = db.ref('music/' + songId); // Adjust path if necessary
+                songRef.once('value').then(snapshot => {
+                    const song = snapshot.val();
+                    console.log('Fetched Song Data:', song); // Debugging log
+                    
+                    if (song) {
+                        document.getElementById('songTitle').textContent = song.songName || 'Unknown Title';
+                        document.getElementById('songImage').src = song.imagePath || 'default-image.jpg';
+                        document.getElementById('audioPlayer').src = song.musicPath || 'default-audio.mp3';
+                    } else {
+                        document.getElementById('playerContainer').innerHTML = '<p>Song not found.</p>';
+                    }
+                }).catch(error => {
+                    console.error('Error fetching song:', error);
+                });
+            } else {
+                document.getElementById('playerContainer').innerHTML = '<p>No song selected.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Player with Firebase</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+
+  <script type="text/javascript">
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "your-api-key",
+      authDomain: "your-auth-domain",
+      databaseURL: "your-database-url",
+      projectId: "your-project-id",
+      storageBucket: "your-storage-bucket",
+      messagingSenderId: "your-messaging-sender-id",
+      appId: "your-app-id",
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database(app);
+
+    // Function to fetch the songs from Firebase
+    function fetchSongs() {
+      const songsRef = db.ref('songs');
+      songsRef.on('value', (snapshot) => {
+        const songs = snapshot.val();
+        let songList = document.getElementById("songList");
+        songList.innerHTML = ''; // Clear previous list
+
+        for (let key in songs) {
+          let song = songs[key];
+
+          let songElement = `
+            <div class="flex items-center justify-between p-4 bg-card rounded-lg">
+              <div class="flex items-center">
+                <div class="bg-accent text-accent-foreground rounded-full p-2 mr-3">
+                  <img aria-hidden="true" alt="${song.category}-icon" src="${song.icon}" />
+                </div>
+                <div>
+                  <h3 class="font-medium">${song.title}</h3>
+                  <p class="text-muted-foreground">${song.category}</p>
+                </div>
+              </div>
+              <button class="bg-primary text-primary-foreground p-2 rounded-full" onclick="playSong('${song.url}')">
+                <img aria-hidden="true" alt="play-icon" src="https://openui.fly.dev/openui/24x24.svg?text=▶️" />
+              </button>
+            </div>`;
+          
+          songList.innerHTML += songElement;
+        }
+      });
+    }
+
+    // Function to play the selected song
+    function playSong(url) {
+      let audio = document.getElementById('audioPlayer');
+      audio.src = url;
+      audio.play();
+    }
+
+    // Initialize fetching of songs on window load
+    window.onload = fetchSongs;
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer base {
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --primary: 221.2 83.2% 53.3%;
+        --primary-foreground: 210 40% 98%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --border: 214.3 31.8% 91.4%;
+      }
+      .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --primary: 217.2 91.2% 59.8%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+      }
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground p-4 rounded-lg shadow-lg max-w-sm mx-auto">
+  <h1 class="text-2xl font-bold mb-4">Overspread</h1>
+  <h2 class="text-xl font-semibold mb-6">Tune’s</h2>
+  
+  <div id="songList" class="space-y-4">
+    <!-- Songs will be dynamically injected here -->
+  </div>
+
+  <audio id="audioPlayer" controls class="mt-4 w-full">
+    <source src="" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</body>
+</html>

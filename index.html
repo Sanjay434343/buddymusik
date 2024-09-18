@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuddyMusic - AI-Generated Music</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script src="https://unpkg.com/unlazy@0.11.3/dist/unlazy.with-hashing.iife.js" defer init></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Marcellus&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        @layer base {
+            :root {
+                --background: 0 0% 100%;
+                --foreground: 240 10% 3.9%;
+                --card: 0 0% 100%;
+                --card-foreground: 240 10% 3.9%;
+                --popover: 0 0% 100%;
+                --popover-foreground: 240 10% 3.9%;
+                --primary: 240 5.9% 10%;
+                --primary-foreground: 0 0% 98%;
+                --secondary: 240 4.8% 95.9%;
+                --secondary-foreground: 240 5.9% 10%;
+                --muted: 240 4.8% 95.9%;
+                --muted-foreground: 240 3.8% 46.1%;
+                --accent: 240 4.8% 95.9%;
+                --accent-foreground: 240 5.9% 10%;
+                --destructive: 0 84.2% 60.2%;
+                --destructive-foreground: 0 0% 98%;
+                --border: 240 5.9% 90%;
+                --input: 240 5.9% 90%;
+                --ring: 240 5.9% 10%;
+                --radius: 0.5rem;
+            }
+            .dark {
+                --background: 240 10% 3.9%;
+                --foreground: 0 0% 98%;
+                --card: 240 10% 3.9%;
+                --card-foreground: 0 0% 98%;
+                --popover: 240 10% 3.9%;
+                --popover-foreground: 0 0% 98%;
+                --primary: 0 0% 98%;
+                --primary-foreground: 240 5.9% 10%;
+                --secondary: 240 3.7% 15.9%;
+                --secondary-foreground: 0 0% 98%;
+                --muted: 240 3.7% 15.9%;
+                --muted-foreground: 240 5% 64.9%;
+                --accent: 240 3.7% 15.9%;
+                --accent-foreground: 0 0% 98%;
+                --destructive: 0 62.8% 30.6%;
+                --destructive-foreground: 0 0% 98%;
+                --border: 240 3.7% 15.9%;
+                --input: 240 3.7% 15.9%;
+                --ring: 240 4.9% 83.9%;
+            }
+        }
+
+        body {
+            
+            scroll-behavior: smooth; /* Smooth scrolling */
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+        }
+        
+        .scrollable-content {
+            overflow-y: scroll; /* Enables vertical scrolling */
+            height: 100%; /* Take up full height */
+        }
+        
+       span {
+            color: rgb(0, 232, 232);
+            letter-spacing: 1px;
+            font-family: "Marcellus", serif;
+            font-weight: 1000;
+            font-size: 2em;
+            margin-top: 15px;
+        } 
+        img{
+            width: 100px;
+            margin-bottom: 15px;
+            transition: 0.5s ease-in-out;
+        }
+        img:hover{
+            width: 100px;
+            margin-bottom: 15px;
+            scale: 1.1;
+        }
+        h3 {
+            color:rgb(0, 232, 232) ;
+            font-size: 19px;
+            font-weight: 1000;
+            position: relative;
+            top: 210px;
+        }
+
+        .btn{
+            background-color: rgba(0, 232, 232, 0.307);
+            padding: 10px 15px;
+            color: black;
+            font-weight: 600;
+            border-radius: 30px;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.5s ease-in-out;
+        }
+
+        .btn:hover{
+            background-color: rgb(0, 201, 201);
+            color: white;
+            scale: 1.1;
+            border: 2px solid black;
+        }
+
+        .btn2{
+            background-color: rgb(0, 0, 0);
+            padding: 10px 15px;
+            color: rgb(255, 255, 255);
+            font-weight: 600;
+            border-radius: 30px;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.5s ease-in-out;
+
+        }
+
+        .btn2:hover{
+            background-color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
+            scale: 1.1;
+            border: 2px solid rgb(0, 0, 0);
+
+        }
+
+
+        @media (max-width: 768px) {
+            span {
+                color: rgb(0, 232, 232);
+                letter-spacing: 1px;
+                font-family: "Marcellus", serif;
+                font-weight: 1000;
+                font-size: 1.5em;
+                margin-top: 15px;
+                position: relative;
+                top: 20px;
+                
+            }
+
+           
+        }
+strong{
+    color:#006363;
+    font-size: 25px;
+    font-weight: 100;
+    margin-bottom: 20px;
+}
+      
+     .album{
+        max-width: 600px;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 50px;
+        border: 5px solid rgb(11, 0, 67);
+        padding: 5px 5px;
+     }
+
+     .album:hover{
+        max-width: 600px;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 40px;
+        border: 7px solid rgb(11, 0, 67);
+        padding: 5px 5px;
+        scale: 1.1;
+     }
+
+     .hbtn{
+        background-color: rgb(172, 211, 211);
+        padding: 9px 20px;
+        margin-top: 50px;
+        border-radius: 30px;
+        border: 1px solid black;
+transition: 0.5s ease-in-out;
+margin-top: 30px;
+     }
+
+     .hbtn:hover{
+        background-color: rgb(172, 211, 211);
+        padding: 9px 20px;
+        margin-top: 50px;
+        border-radius: 30px;
+     }
+
+
+     .mus{
+        margin-bottom: 30px;
+     }
+
+     .cart{
+        text-align: center;
+        margin-top: -100px;
+        background-color: white;
+     }
+
+     .foot{
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+     }
+
+     .sec{
+        border-bottom-left-radius: 50px;
+        border-bottom-right-radius: 50px;
+     }
+           </style>
+</head>
+<body>
+    <div class="min-h-screen bg-gradient-to-br from-white to-blue-200 text-foreground flex flex-col items-center justify-center">
+        <!-- Hero Section -->
+        <section class="w-full text-center py-20 relative overflow-hidden sec">
+            <div class="absolute inset-0 bg-gradient-to-br from-white to-blue-200 transform scale-110"></div>
+            <div class="relative z-10 max-w-4xl mx-auto px-4">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4"> <strong> Welcome to</strong> <br> <span> BuddyMusic</span></h1>
+              <br>  <p class="text-lg md:text-xl mb-8">Discover AI-generated music that elevates your experience.</p>
+                <div class="flex justify-center space-x-4">
+                    <a href="home.html" class="btn">Listen Now</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="w-full py-20">
+            <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white backdrop-filter backdrop-blur-lg p-6 shadow-lg" style="border-radius: 50px; border:2px solid rgb(11, 0, 67);">
+                   <img src="data:image/png;base64,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">
+                    <h2 class="text-2xl font-semibold mb-2" style="font-weight: 700; color:black;">AI Music Creation</h2>
+                    <p class="text-muted-foreground">Experience the future of music with AI-generated tracks that adapt to your mood.</p>
+                </div>
+                <div class="bg-white backdrop-filter backdrop-blur-lg p-6 shadow-lg" style="border-radius: 50px; border:2px solid rgb(11, 0, 67);">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB3ElEQVR4nO2ZS0sCURiG/Wn9gc5EQptauLESCiJo4XgpgmrITWZQIAQRhota2DgapF1OXopKCDchFRhlQ0TUogtYfXFkNFtVOnrm5Hnh2c0w3zPvmcMMYzLx8PDwkAgOuQ2JCtBEcMhtJr1EbP4sFZDeIsOBcyqgekTIiRVEeYh6I6I8VD3Tr0VoPxPoB/4k4gzmwRN9MBTOYL5FRNrFsKXdroyVIQdbvYcwsJA1FFbvYUmkelYye0Wk0xVNd0/Giv2zyRdC32wSbL4U2ObSxsKXAjJbeU4yM5n9S8Qd3ZdCOcAqMIUUygGZnYtgA7SBeSMq/QYwb0Rt4Uam5TOIX72xL4JEBbon4+CL5WGn8MG2CNKweHbBnyiwL4I0+n0pWMncsy+CSl95CowsZmD99IltEaTR4YqAayUL0YtXtkWQhnl0AybWTiF2WWRbBGmQHW5p/5Ztka7xTfAoZ7B9/c6miNmtLat87csK0xQRHJHSzhXOPetyLYmGyOD8AaxmH3W5BqYh0juTgMDRna4CuJkiPVNbpfet3ZvGvW9JjRSpdyfCRhGpdyfCRhFpJhIXUem3gHkjKv07j1uyEfvyCQSO75jCvnzyXURwKnu0f6fViuBU9ioiPDw8/z+f/JfqhsXZKSgAAAAASUVORK5CYII=">
+                    <h2 class="text-2xl font-semibold mb-2" style="font-weight: 700; color:black;">Custom Playlists</h2>
+                    <p class="text-muted-foreground">Create and share playlists based on AI recommendations and your preferences.</p>
+                </div>
+                <div class="bg-white backdrop-filter backdrop-blur-lg p-6 shadow-lg" style="border-radius: 50px; border:2px solid rgb(11, 0, 67);">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAADoklEQVR4nO1Yy2sTQRgfFd/FF4gzbbU+UPFxslW0ma1XEUQFBb3oTbA7aZGqFw9KqSI+Lp59nMQ/IIIePAl9QUsFH52JCDa2aGZSoVZ8008m2Wh2stskzcZEyA8+SJadb36/7zW7i1AVVVRRhcZRBHMYAcsmcMMm0MsIxBmBH47FnWvXWwlQfS+qFJyph4WMwHmHMORpcbYKzp1sgAVlJR/GcIRhiBVA3GU2hhGbwOEyUIdZNoFLjMDUTMln2BTDcPUigtn/hLreiGF44BPRcRvDnVYCB9trYXPHKlisTf9mBA4xDHcZho+eQjDc14EpuQAbw2UP4l8Yga7wCliSa/2p5bCUYbjirAGXHwKdpa95s2wwjLYRaCzUl42hSa81y6lkPZGcNmbDYhgN10H9TH2G66DeFKEbuyTTyRmVrrKZSeRNnMawk2H4avg+i0pwSJlzviso/wzDVaMXPgQ6lfQJa04b3YxB+W9vgGUe0ykUpICbhoDbKGDYBO4ZWbgWpPPeTOd6zgfm3IGePkaQulFQsAlIl/Na2IQCRnvqsHP1QWDObQzfXRlYCTUoYLSuhBojA98Cc26emIE5/lf7VAU4CL0e39YiVIcl1CNLSE6Feo8qPQONAzA3JBInKJf9llBgmKhoAS1C7teR9iDumHxS0QJMwuv6RqDpxYc//6mQFypOQMtLuTEUVQdMAat73gKKDMP8x1HY8yqevNY8rJoCF7AvGp1PhWyzuOyjQn3WG+mNXeZHXiS2WFxJi6svmlya/JrukT9rG3pG0tF/jsB4AzP2Sd2nPqe4xMOa27Tkd4tEncXVMzP1+QjQzWoJNZBR32NZ5HtT5B0Bx7OceAhwGVdDmqNv5L3I5yuACnnMXOeOfCyTyLOj4PFtKJJDgCPCMxPJsvGZFnkJ4OqhH/m1LvJyKsTj1DOKkTwEJC3BPAh4zukCBMiYJ/mMsnEieMuTfCECuOxFJqhQk0UJEPKnSX59fyzr4GocG1tUrAAq1GTWWv905SfAJL+h750ZtYm9r8a3+5IvqIQUBC7ARb7fJK/eWK/lDpQLkTIJoEJ1/iUfA8rlL4vLUcrVU91wu6KJnB+8yiZAk09PF8pVKyoGkSIEzKSJDfKniyJf2BSaQCb0cV1MDwSCSJ5TiMuerLX6WeN/EWBxZfs9SgxVugDK1eDWFzBvuoe5oUoVQLkabB5WtdP60Op0inSdpRu7vALkJypUt55wvpGvoooq0H+L3/PjuuOFOhHDAAAAAElFTkSuQmCC">
+
+                        <h2 class="text-2xl font-semibold mb-2" style="font-weight: 700; color:black;">Enhanced Listening</h2>
+
+                    <p class="text-muted-foreground">Enjoy an immersive listening experience with our advanced audio technologies.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- About Us Section -->
+        <section class="w-full py-20 bg-white/30 backdrop-filter backdrop-blur-lg">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold mb-4">About Us</h2>
+                <p class="text-muted-foreground">We are pioneering the future of music with our cutting-edge AI technology, designed to craft unique and personalized sound experiences just for you. Our innovative approach harnesses the power of artificial intelligence to generate music that resonates with your individual preferences and emotions, creating a truly one-of-a-kind auditory journey. Discover how our AI can transform the way you experience music, offering fresh and custom-tailored compositions that are as unique as you are.</p>
+            </div>
+        </section>
+        
+      
+        
+        <!-- Music Projects Section -->
+        <section class="w-full py-20">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-8" >Our Music Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" >
+                    <div class="bg-white backdrop-filter backdrop-blur-lg p-6 shadow-lg" style="border-radius: 50px; border:2px solid rgb(11, 0, 67);">
+                        <img src="https://cdn.pixabay.com/photo/2022/09/25/23/28/android-7479380_960_720.png" alt="" class="album">
+                            <p class="text-muted-foreground mus" style="font-weight: 700;">An innovative AI-generated music project that explores new soundscapes.</p>
+                    </div>
+                    <div class="bg-white backdrop-filter backdrop-blur-lg p-6 shadow-lg" style="border-radius: 50px; border:2px solid rgb(11, 0, 67);">
+                        <img src="https://cdn.pixabay.com/photo/2024/02/02/22/05/audio-8549150_960_720.jpg" alt="" class="album">
+                        <p class="text-muted-foreground mus" style="font-weight: 700;">A collection of tracks designed to enhance your productivity and relaxation.</p>
+                  
+                    </div>
+                    <div class="bg-white backdrop-filter backdrop-blur-lg p-6 rounded-lg " style="border-radius: 50px; border:2px solid rgb(11, 0, 67);">
+                        <img src="https://cdn.pixabay.com/photo/2023/09/20/11/40/plants-8264654_1280.jpg" alt="" class="album">
+                        <p class="text-muted-foreground mus" style="font-weight: 700;">Explore the latest in AI-generated music with our cutting-edge project.</p>
+                 
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        
+      
+        
+        <!-- Newsletter Subscription Section -->
+        <section class="w-full py-20 bg-white backdrop-filter backdrop-blur-lg foot">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>
+                <p class="text-muted-foreground mb-8">Sign up for our newsletter to receive the latest updates and exclusive content.</p>
+                <form id="newsletterForm" class="flex justify-center space-x-4">
+                    <input id="emailInput" type="email" placeholder="Your Email Address" class="py-2 px-4 rounded-lg border border-gray-300" required style="border-radius: 30px;">
+                    <button type="submit" class="btn2">Subscribe</button>
+                </form>
+                <p id="statusMessage" class="mt-4"></p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="w-full py-10 bg-gray-800 text-white">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <p>&copy; 2024 BuddyMusic. All rights reserved.</p>
+                <div class="mt-4 space-x-4">
+                    <a href="#" class="hover:underline">Privacy Policy</a>
+                    <a href="#" class="hover:underline">Terms of Service</a>
+                </div>
+                <div class="mt-4">
+                    <a href="https://facebook.com" class="text-blue-600 hover:underline">Facebook</a> |
+                    <a href="https://twitter.com" class="text-blue-400 hover:underline">Twitter</a> |
+                    <a href="https://instagram.com" class="text-pink-500 hover:underline">Instagram</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase configuration (Ensure you've added Firebase SDKs in your project)
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "buddymusic-14682.firebaseapp.com",
+            databaseURL: "https://buddymusic-14682-default-rtdb.firebaseio.com",
+            projectId: "buddymusic-14682",
+            storageBucket: "buddymusic-14682.appspot.com",
+            messagingSenderId: "915835286798",
+            appId: "1:915835286798:android:33e6a50bf19aa1f906d35f"
+        };
+    
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    
+        // Handle form submission
+        document.getElementById('newsletterForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the usual way
+    
+            const email = document.getElementById('emailInput').value;
+            const statusMessage = document.getElementById('statusMessage');
+    
+            if (email) {
+                // Store the email in a separate node (not inside the music node)
+                const subscribersRef = db.ref('newsletterSubscribers'); // New node outside music
+    
+                subscribersRef.push({
+                    email: email,
+                    subscribedAt: new Date().toISOString()
+                }).then(() => {
+                    statusMessage.textContent = 'Successfully subscribed!';
+                    statusMessage.style.color = 'green';
+                    document.getElementById('newsletterForm').reset();
+                }).catch(error => {
+                    statusMessage.textContent = 'Error: ' + error.message;
+                    statusMessage.style.color = 'red';
+                });
+            } else {
+                statusMessage.textContent = 'Please enter a valid email.';
+                statusMessage.style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

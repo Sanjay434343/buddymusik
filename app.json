@@ -1,0 +1,29 @@
+{
+    "music": {
+      "0001": {
+        "songName": "மகிழ்ச்சியின் நிழல்கள்",
+        "writer": "Man",
+        "imagePath": "assets\\images\\s1.png",
+        "musicPath": "assets\\music\\மகிழ்ச்சியின் நிழல்கள் (1) (mp3cut.net).mp3"
+      },
+      "0002": {
+        "songName": "Dad's Girl",
+        "writer": "Dad",
+        "imagePath": "assets\\images\\dad's girl.png",
+        "musicPath": "assets\\music\\dg.mp3"
+      },
+      "0003": {
+        "songName": "Hidden Golden memeory",
+        "writer": "Dad",
+        "imagePath": "assets\\images\\hm.jpg",
+        "musicPath": "assets\\music\\Hidden golden memories.mp3"
+      },
+      "0004": {
+        "songName": "connection",
+        "writer": "Dad",
+        "imagePath": "assets\\images\\con.jpg",
+        "musicPath": "assets\\music\\நீ என்னிடம் வருவாய், நான் உனக்காக வருவேன.mp3"
+      }
+    }
+  }
+  
