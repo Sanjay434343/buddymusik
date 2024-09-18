@@ -11,17 +11,22 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         body {
-            background-color: #121212;
-            color: white;
+            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+            color: #eee;
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
         }
         .header {
-            background-color: #1f1f1f;
+            background: linear-gradient(135deg, #ff0050, #ff7300);
             padding: 15px;
             text-align: center;
-            border-bottom: 1px solid #333;
+            border-bottom: 2px solid #ff0050;
+        }
+        .header h1 {
+            color: white;
+            font-size: 2rem;
+            margin: 0;
         }
         .container {
             max-width: 900px;
@@ -36,6 +41,7 @@
             display: flex;
             align-items: flex-start;
             transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .card img {
             width: 120px;
@@ -43,6 +49,10 @@
             object-fit: cover;
             border-radius: 8px;
             margin-right: 15px;
+            transition: transform 0.3s ease;
+        }
+        .card img:hover {
+            transform: scale(1.05);
         }
         .card-content {
             flex: 1;
@@ -53,10 +63,11 @@
             font-size: 1.2rem;
             font-weight: bold;
             margin: 0;
+            color: #ff0050;
         }
         .card p {
             font-size: 1rem;
-            color: #888;
+            color: #bbb;
             margin: 5px 0;
         }
         .card-actions {
@@ -65,17 +76,16 @@
             gap: 10px;
         }
         .btn {
-            margin-top: 15px;
-            background: #161616;
+            background: #ff0050;
             color: white;
-            border-radius: 100px;
+            border-radius: 50px;
             padding: 8px 16px;
             text-decoration: none;
             transition: background-color 0.3s ease;
             text-align: center;
         }
         .btn:hover {
-            background: #013200;
+            background: #e60039;
         }
         /* Music player styles */
         .music-player {
@@ -84,28 +94,40 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #888;
-            padding: 10px;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            background: #222;
+            padding: 10px 20px; /* Adjust padding for height */
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
             z-index: 9999;
-            border-top-right-radius: 30px;
-            border-top-left-radius: 30px;
+            border-top-right-radius: 20px;
+            border-top-left-radius: 20px;
+            border: 2px solid #ff0050;
+            box-sizing: border-box;
         }
         
         .music-player.visible {
             display: block; /* Show when visible class is added */
         }
         
+        .song-info {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Adjust gap between image and content */
+        }
+        
         .song-info img {
-            width: 60px; /* Adjust size as needed */
-            height: 60px;
+            width: 50px; /* Adjust size as needed */
+            height: 50px;
             object-fit: cover;
+            border: 2px solid #ff0050;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
         
         .song-info div {
             display: flex;
             flex-direction: column;
             justify-content: center;
+            color: white;
         }
         
         .material-symbols-outlined {
@@ -116,48 +138,34 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-top: 20px;
-        }
-        .music-player img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 10px;
-        }
-        .music-player .song-info {
-            display: flex;
-            align-items: center;
-        }
-        .music-player .song-info h4 {
-            margin: 0;
-            color: black;
+            margin-top: 10px; /* Adjust margin for spacing */
         }
         .music-player .maximize-btn {
             cursor: pointer;
             text-align: right;
-            font-size: 35px;
-      
+            font-size: 25px; /* Adjust font size */
+            color: #ff0050;
         }
         .maximize {
             position: absolute;
             bottom: 10px;
             right: 10px;
             cursor: pointer;
-            background-color: #0056b3;
+            background: #ff0050;
             color: white;
             border-radius: 50%;
             padding: 8px;
             display: none;
-            font-size: 30px;
+            font-size: 25px; /* Adjust font size */
+            box-shadow: 0 4px 8px rgba(255, 0, 0, 0.5);
         }
         
-        .tit{
+        .tit {
             font-size: 15px;
             font-weight: bold;
             text-align: center;
-          margin-top: 20px;
-          margin-bottom: 5px;
+            margin-top: 10px; /* Adjust margin */
+            margin-bottom: 5px;
         }
         
     </style>
